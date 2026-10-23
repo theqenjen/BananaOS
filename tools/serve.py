@@ -13,25 +13,7 @@ SERIAL_LOG  = "/tmp/serial.log"
 BUILD_LOG   = "/tmp/build.log"
 PORT        = 3000
 
-INDEX_HTML = """<!doctype html><html><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>BananaOS</title>
-<style>
-  *{box-sizing:border-box}
-  body{background:#0b0e14;margin:0;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
-  .bar{background:#1e1e2e;color:#f5e0a0;padding:10px 16px;font-size:15px;border-bottom:1px solid #3a2e00}
-  .term{color:#c8d3f5;padding:16px;white-space:pre-wrap;font-size:13px;line-height:1.55;min-height:80vh}
-  .hint{color:#5b6071;font-size:12px;padding:0 16px 16px}
-</style></head><body>
-<div class="bar">&#127820; BananaOS &mdash; serial output</div>
-<div class="term" id="t"></div>
-<div class="hint">Live serial output from the kernel running in QEMU.</div>
-<script>
-const t=document.getElementById('t');
-const es=new EventSource('/stream');
-es.onmessage=e=>{ t.textContent += e.data + '\\n'; window.scrollTo(0,document.body.scrollHeight); };
-</script>
-</body></html>"""
+INDEX_FILE = os.path.join(APP_DIR, "web", "index.html")
 
 
 def run(cmd, cwd=APP_DIR):
@@ -86,10 +68,16 @@ class Handler(http.server.BaseHTTPRequestHandler):
                     pass
                 time.sleep(0.3)
         else:
+            try:
+                with open(INDEX_FILE, "r") as f:
+                    html = f.read()
+            except FileNotFoundError:
+                html = "<h1>BananaOS</h1><p>web/index.html not found</p>"
             self.send_response(200)
-            self.send_header("Content-Type", "text/html")
+            self.send_header("Content-Type", "text/html; charset=utf-8")
+            self.send_header("Cache-Control", "no-cache")
             self.end_headers()
-            self.wfile.write(INDEX_HTML.encode())
+            self.wfile.write(html.encode())
 
     def log_message(self, *a):
         pass

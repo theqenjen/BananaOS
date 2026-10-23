@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>BananaOS</title>
+<style>
+  :root{
+    --bar-bg: rgba(0,0,0,.28);
+    --bar-h: 28px;
+    --dock-bg: rgba(255,255,255,.22);
+    --win-bg: #ebebec;
+    --win-title: linear-gradient(#e8e8e9,#d6d7d9);
+    --term-bg: #1d1f21;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent}
+  html,body{height:100%; margin:0; overflow:hidden;
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Arial,sans-serif;
+    user-select:none; -webkit-user-select:none}
+  #desktop{
+    position:fixed; inset:0;
+    background:
+      radial-gradient(120% 120% at 80% 0%, #8e6fce 0%, transparent 45%),
+      radial-gradient(120% 120% at 10% 90%, #f093a8 0%, transparent 40%),
+      linear-gradient(135deg,#5b6fe0 0%,#7b4ba2 55%,#3a2a6e 100%);
+    overflow:hidden;
+  }
+
+  /* ---------- menu bar ---------- */
+  #menubar{
+    position:fixed; top:0; left:0; right:0; height:var(--bar-h);
+    background:var(--bar-bg); backdrop-filter:blur(18px) saturate(140%);
+    -webkit-backdrop-filter:blur(18px) saturate(140%);
+    display:flex; align-items:center; padding:0 10px; gap:14px;
+    color:#fff; font-size:13px; z-index:9000;
+    border-bottom:1px solid rgba(255,255,255,.08);
+  }
+  #mb-logo{font-size:15px; line-height:1}
+  .mb-item{opacity:.95; cursor:default; padding:0 2px}
+  .mb-item:hover{background:rgba(255,255,255,.18); border-radius:4px}
+  .mb-spacer{flex:1}
+  #mb-icons{display:flex; align-items:center; gap:9px; font-size:12px}
+  #mb-icons svg{display:block}
+  #clock{font-variant-numeric:tabular-nums; min-width:130px; text-align:right}
+
+  /* ---------- windows ---------- */
+  .win{
+    position:absolute; min-width:240px; min-height:150px;
+    background:var(--win-bg); border-radius:11px;
+    box-shadow:0 22px 60px rgba(0,0,0,.42), 0 2px 8px rgba(0,0,0,.3);
+    display:flex; flex-direction:column; overflow:hidden;
+    border:1px solid rgba(0,0,0,.18);
+  }
+  .win-title{
+    height:30px; background:var(--win-title);
+    display:flex; align-items:center; padding:0 11px; gap:8px;
+    border-bottom:1px solid rgba(0,0,0,.12); cursor:default;
+    flex:0 0 auto;
+  }
+  .lights{display:flex; gap:7px}
+  .light{width:12px;height:12px;border-radius:50%; border:.5px solid rgba(0,0,0,.16)}
+  .light.close{background:#ff5f57}
+  .light.min{background:#febc2e}
+  .light.max{background:#28c840}
+  .win-title .title{font-size:13px; font-weight:600; color:#3a3a3c; flex:1; text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+  .win-body{flex:1; overflow:auto; background:#fff}
+  .win-body.term{background:var(--term-bg); color:#e6e6e6; font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:12.5px; padding:12px 14px; white-space:pre-wrap; line-height:1.5}
+
+  /* about window */
+  .about{display:flex; flex-direction:column; align-items:center; text-align:center; padding:28px 24px; gap:6px}
+  .about .logo{font-size:64px; line-height:1; margin-bottom:6px}
+  .about h1{margin:0; font-size:22px; font-weight:600}
+  .about .ver{color:#6e6e73; font-size:13px}
+  .about hr{width:80%; border:none; border-top:1px solid #e3e3e5; margin:10px 0}
+  .about .row{display:flex; justify-content:space-between; width:100%; font-size:12px; color:#3a3a3c; padding:2px 8px}
+  .about .row b{font-weight:600}
+
+  /* finder */
+  .finder{display:flex; height:100%}
+  .finder .side{width:140px; background:#ececee; border-right:1px solid #d8d8db; padding:10px 6px; font-size:13px}
+  .finder .side .grp{color:#8a8a8e; font-size:11px; text-transform:uppercase; padding:8px 8px 3px}
+  .finder .side .it{padding:5px 8px; border-radius:6px; display:flex; align-items:center; gap:7px}
+  .finder .side .it.active{background:#3a82f7; color:#fff}
+  .finder .main{flex:1; padding:14px; font-size:13px; color:#3a3a3c}
+  .finder .file{display:flex; flex-direction:column; align-items:center; width:80px; gap:4px; float:left; margin:6px}
+  .finder .file .ic{font-size:34px}
+  .finder .file .nm{font-size:11px; text-align:center}
+
+  /* ---------- dock ---------- */
+  #dock{
+    position:fixed; bottom:8px; left:50%; transform:translateX(-50%);
+    display:flex; align-items:flex-end; gap:8px;
+    padding:7px 9px; background:var(--dock-bg);
+    backdrop-filter:blur(22px) saturate(160%);
+    -webkit-backdrop-filter:blur(22px) saturate(160%);
+    border:1px solid rgba(255,255,255,.25);
+    border-radius:20px; box-shadow:0 12px 40px rgba(0,0,0,.4);
+    z-index:9500;
+  }
+  .dock-ic{
+    width:48px; height:48px; display:flex; align-items:center; justify-content:center;
+    font-size:34px; cursor:pointer; transition:transform .14s ease, margin .14s ease;
+    transform-origin:bottom center;
+  }
+  .dock-ic:hover{transform:scale(1.35); margin:0 4px}
+  .dock-sep{width:1px; height:40px; background:rgba(255,255,255,.3); margin:0 2px; align-self:center}
+  .dot{position:absolute; bottom:2px; width:4px; height:4px; border-radius:50%; background:#fff; opacity:.85}
+  .dock-wrap{position:relative; display:flex; align-items:flex-end; justify-content:center}
+
+  @media (max-width:680px){
+    .win{max-width:94vw}
+    #dock{gap:6px; padding:6px 7px}
+    .dock-ic{width:40px;height:40px;font-size:28px}
+    .dock-ic:hover{transform:scale(1.2)}
+    .finder .side{width:96px}
+    #clock{min-width:104px}
+  }
+</style>
+</head>
+<body>
+<div id="desktop"></div>
+
+<div id="menubar">
+  <span id="mb-logo">🍌</span>
+  <span class="mb-item"><b>BananaOS</b></span>
+  <span class="mb-item">File</span>
+  <span class="mb-item">Edit</span>
+  <span class="mb-item">View</span>
+  <span class="mb-item">Go</span>
+  <span class="mb-item">Window</span>
+  <span class="mb-item">Help</span>
+  <span class="mb-spacer"></span>
+  <span id="mb-icons">
+    <svg width="16" height="12" viewBox="0 0 16 12" fill="#fff"><path d="M8 11.2 9.5 9.6A2 2 0 0 0 6.5 9.6L8 11.2Zm0-9.1C5 2.1 2.3 3.4.8 5.4l1.3 1.3C3.3 5.2 5.5 4.2 8 4.2s4.7 1 5.9 2.5l1.3-1.3C13.7 3.4 11 2.1 8 2.1Zm0 2.9C6 5 4.2 5.9 3.2 7.3l1.3 1.3C5.3 7.6 6.6 7 8 7s2.7.6 3.5 1.6l1.3-1.3C11.8 5.9 10 5 8 5Z"/></svg>
+    <svg width="24" height="12" viewBox="0 0 24 12" fill="#fff"><rect x="0" y="2" width="20" height="8" rx="2" stroke="#fff" stroke-width="1" fill="none"/><rect x="2" y="4" width="15" height="4" rx="1"/><rect x="21" y="4.5" width="2" height="3" rx="1"/></svg>
+    <span id="clock"></span>
+  </span>
+</div>
+
+<!-- Terminal -->
+<div class="win" id="win-terminal" style="left:8%;top:14%;width:440px;height:280px">
+  <div class="win-title" data-drag>
+    <div class="lights"><span class="light close"></span><span class="light min"></span><span class="light max"></span></div>
+    <div class="title">Terminal — bananaos</div>
+  </div>
+  <div class="win-body term" id="term-output"></div>
+</div>
+
+<!-- About -->
+<div class="win" id="win-about" style="left:30%;top:12%;width:300px;height:360px;display:none">
+  <div class="win-title" data-drag>
+    <div class="lights"><span class="light close"></span><span class="light min"></span><span class="light max"></span></div>
+    <div class="title">About This BananaOS</div>
+  </div>
+  <div class="win-body">
+    <div class="about">
+      <div class="logo">🍌</div>
+      <h1>BananaOS</h1>
+      <div class="ver">Version 0.1 “Peel”</div>
+      <hr>
+      <div class="row"><span>Kernel</span><b>32-bit multiboot2</b></div>
+      <div class="row"><span>Language</span><b>C &amp; NASM</b></div>
+      <div class="row"><span>Bootloader</span><b>GRUB</b></div>
+      <div class="row"><span>Display</span><b>VGA 80×25</b></div>
+      <div class="row"><span>Memory</span><b>64 MB</b></div>
+      <hr>
+      <div class="ver" style="font-size:11px">© 2026 theqenjen. All rights reserved.</div>
+    </div>
+  </div>
+</div>
+
+<!-- Finder -->
+<div class="win" id="win-finder" style="left:14%;top:18%;width:460px;height:300px;display:none">
+  <div class="win-title" data-drag>
+    <div class="lights"><span class="light close"></span><span class="light min"></span><span class="light max"></span></div>
+    <div class="title">Finder — BananaOS HD</div>
+  </div>
+  <div class="win-body">
+    <div class="finder">
+      <div class="side">
+        <div class="grp">Favourites</div>
+        <div class="it active">🍌 BananaOS HD</div>
+        <div class="it">📄 Desktop</div>
+        <div class="it">📁 Documents</div>
+        <div class="it">⬇️ Downloads</div>
+        <div class="grp">Locations</div>
+        <div class="it">💽 iCloud</div>
+      </div>
+      <div class="main">
+        <div class="file"><div class="ic">📁</div><div class="nm">src</div></div>
+        <div class="file"><div class="ic">📁</div><div class="nm">iso</div></div>
+        <div class="file"><div class="ic">📄</div><div class="nm">Makefile</div></div>
+        <div class="file"><div class="ic">📄</div><div class="nm">grub.cfg</div></div>
+        <div class="file"><div class="ic">📄</div><div class="nm">linker.ld</div></div>
+        <div class="file"><div class="ic">📄</div><div class="nm">README.md</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Dock -->
+<div id="dock">
+  <div class="dock-wrap"><div class="dock-ic" data-app="finder" title="Finder">🗂️</div><div class="dot" style="display:none"></div></div>
+  <div class="dock-wrap"><div class="dock-ic" data-app="terminal" title="Terminal">🖥️</div><div class="dot"></div></div>
+  <div class="dock-wrap"><div class="dock-ic" data-app="about" title="About">🍌</div><div class="dot" style="display:none"></div></div>
+  <div class="dock-sep"></div>
+  <div class="dock-wrap"><div class="dock-ic" data-app="trash" title="Trash">🗑️</div><div class="dot" style="display:none"></div></div>
+</div>
+
+<script>
+  // ---- clock ----
+  function tick(){
+    const d=new Date();
+    const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    let h=d.getHours(), m=d.getMinutes();
+    const ap=h>=12?'PM':'AM'; h=h%12||12;
+    document.getElementById('clock').textContent =
+      days[d.getDay()]+' '+months[d.getMonth()]+' '+d.getDate()+'  '+h+':'+(m<10?'0':'')+m+' '+ap;
+  }
+  tick(); setInterval(tick,10000);
+
+  // ---- window focus ----
+  let z=100;
+  const wins=document.querySelectorAll('.win');
+  function focusWin(w){ w.style.display='flex'; z++; w.style.zIndex=z; }
+
+  // ---- dragging ----
+  let drag=null;
+  document.querySelectorAll('.win-title').forEach(t=>{
+    t.addEventListener('pointerdown',e=>{
+      if(e.target.classList.contains('light'))return;
+      const w=t.closest('.win'); focusWin(w);
+      const r=w.getBoundingClientRect();
+      drag={w, dx:e.clientX-r.left, dy:e.clientY-r.top};
+      w.style.transition='none';
+    });
+  });
+  window.addEventListener('pointermove',e=>{
+    if(!drag)return;
+    let x=e.clientX-drag.dx, y=e.clientY-drag.dy;
+    y=Math.max(28,y); // keep below menu bar
+    drag.w.style.left=x+'px'; drag.w.style.top=y+'px';
+  });
+  window.addEventListener('pointerup',()=>{ if(drag){drag.w.style.transition=''; drag=null;} });
+
+  // click anywhere in a window focuses it
+  wins.forEach(w=>w.addEventListener('pointerdown',()=>focusWin(w)));
+
+  // ---- dock ----
+  document.querySelectorAll('.dock-ic').forEach(ic=>{
+    ic.addEventListener('click',()=>{
+      const app=ic.dataset.app;
+      if(app==='terminal') focusWin(document.getElementById('win-terminal'));
+      else if(app==='about') focusWin(document.getElementById('win-about'));
+      else if(app==='finder') focusWin(document.getElementById('win-finder'));
+    });
+  });
+
+  // ---- terminal: live serial output ----
+  const term=document.getElementById('term-output');
+  const es=new EventSource('/stream');
+  es.onmessage=e=>{ term.textContent += e.data + '\n'; term.scrollTop=term.scrollHeight; };
+
+  // initial focus
+  focusWin(document.getElementById('win-terminal'));
+</script>
+</body>
+</html>
