@@ -1,0 +1,9 @@
+# BananaOS build artifacts
+kernel/obj/
+kernel/kernel.elf
+kernel/bananaos.iso
+kernel/iso/
+*.o
+*.iso
+*.elf
+__pycache__/
