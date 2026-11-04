@@ -2,5 +2,18 @@
   "previewPort": 3000,
   "healthPath": "/",
   "startCommand": "docker compose -f docker-compose.base44.yml up -d --build",
-  "secrets": []
+  "secrets": [
+    {
+      "name": "TWILIO_ACCOUNT_SID",
+      "description": "Twilio account SID (from the Twilio console dashboard) — enables real outbound calls from the Phone app."
+    },
+    {
+      "name": "TWILIO_AUTH_TOKEN",
+      "description": "Twilio auth token (from the Twilio console dashboard) — paired with the account SID."
+    },
+    {
+      "name": "TWILIO_FROM_NUMBER",
+      "description": "Your verified Twilio phone number in E.164 (e.g. +441234567890) that outbound calls are placed from."
+    }
+  ]
 }

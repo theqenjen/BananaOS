@@ -4,6 +4,7 @@ import { AppShell } from '../components/AppShell'
 import { Avatar } from '../components/Avatar'
 import { Glyph } from '../os/Glyph'
 import { KEYPAD_TONES, clock, duration, relativeDay } from '../os/utils'
+import { placeCall, getCallStatus, hangupCall, mapStatus } from '../os/callApi'
 
 const KEYS = [
   { digit: '1', letters: '' },
@@ -37,18 +38,14 @@ const TABS = [
   { id: 'contacts', label: 'Contacts', icon: 'addPerson' },
 ]
 
-function CallScreen({ call, onEnd, playTone }) {
-  const [connected, setConnected] = useState(false)
+function CallScreen({ call, phase, demo, onEnd, playTone }) {
   const [elapsed, setElapsed] = useState(0)
   const [muted, setMuted] = useState(false)
   const [speaker, setSpeaker] = useState(false)
   const [showPad, setShowPad] = useState(false)
   const [digits, setDigits] = useState('')
 
-  useEffect(() => {
-    const timer = setTimeout(() => setConnected(true), 2200)
-    return () => clearTimeout(timer)
-  }, [])
+  const connected = phase === 'active'
 
   useEffect(() => {
     if (!connected) return
@@ -56,14 +53,22 @@ function CallScreen({ call, onEnd, playTone }) {
     return () => clearInterval(timer)
   }, [connected])
 
+  const statusText = connected
+    ? duration(elapsed)
+    : phase === 'calling'
+      ? 'Ringing…'
+      : demo
+        ? 'Calling…'
+        : 'Connecting…'
+
   const name = call.contact?.name || call.number
 
   return (
     <div className="call-screen">
       <div className="call-top">
         <span className="call-status">
-          {connected ? duration(elapsed) : 'Calling…'}
-          {call.contact ? '' : ' · mobile'}
+          {statusText}
+          {demo ? ' · demo' : ''}
         </span>
       </div>
 
@@ -141,23 +146,28 @@ export function PhoneApp() {
   const [number, setNumber] = useState('')
   const [call, setCall] = useState(null)
   const [detail, setDetail] = useState(null)
-  const endTimerRef = useRef(null)
-
-  useEffect(() => () => clearTimeout(endTimerRef.current), [])
 
   const match = actions.contactForNumber(number)
 
-  const startCall = (dialNumber, contact) => {
-    const resolved = contact ?? actions.contactForNumber(dialNumber)
-    setCall({
-      number: dialNumber,
-      contact: resolved,
-      startedAt: Date.now(),
-    })
-    actions.playTone(660, 160, 0.045)
-  }
+  // Poll the live Twilio call status while a real call is in progress.
+  useEffect(() => {
+    if (!call?.sid || call.phase === 'ended') return
+    const poll = setInterval(async () => {
+      const res = await getCallStatus(call.sid)
+      if (!res.ok) return
+      const next = mapStatus(res.status)
+      if (next === 'ended') {
+        clearInterval(poll)
+        setCall((c) => (c ? { ...c, phase: 'ended' }))
+      } else {
+        setCall((c) => (c && next !== c.phase ? { ...c, phase: next } : c))
+      }
+    }, 3000)
+    return () => clearInterval(poll)
+  }, [call?.sid])
 
-  const endCall = (seconds) => {
+  const finishCall = async (seconds) => {
+    if (call?.sid) await hangupCall(call.sid).catch(() => {})
     actions.logCall({
       contactId: call?.contact?.id || null,
       number: call?.contact?.phone || call?.number,
@@ -169,10 +179,46 @@ export function PhoneApp() {
     setTab('recents')
   }
 
+  const startCall = async (dialNumber, contact) => {
+    const resolved = contact ?? actions.contactForNumber(dialNumber)
+    actions.playTone(660, 160, 0.045)
+    setCall({
+      number: dialNumber,
+      contact: resolved,
+      startedAt: Date.now(),
+      sid: null,
+      phase: 'connecting',
+      demo: false,
+    })
+
+    const res = await placeCall(dialNumber)
+    if (res.ok) {
+      setCall((c) => (c ? { ...c, sid: res.sid, phase: mapStatus(res.status) } : c))
+    } else if (res.configured === false) {
+      // No Twilio credentials — fall back to a simulated call so the UI works.
+      setCall((c) => (c ? { ...c, demo: true } : c))
+      setTimeout(() => {
+        setCall((c) => (c && c.demo ? { ...c, phase: 'active' } : c))
+      }, 2200)
+    } else {
+      // A real Twilio error — still show the call screen briefly with the reason.
+      setCall((c) => (c ? { ...c, demo: true, error: res.error } : c))
+      setTimeout(() => {
+        setCall((c) => (c ? { ...c, phase: 'active' } : c))
+      }, 1600)
+    }
+  }
+
   if (call) {
     return (
       <div className="app-layer call-layer">
-        <CallScreen call={call} onEnd={endCall} playTone={actions.playTone} />
+        <CallScreen
+          call={call}
+          phase={call.phase}
+          demo={call.demo}
+          onEnd={finishCall}
+          playTone={actions.playTone}
+        />
       </div>
     )
   }
