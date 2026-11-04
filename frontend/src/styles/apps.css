@@ -1,0 +1,339 @@
+/* ============================== app scaffolding ============================== */
+.app-screen {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  padding-bottom: 12px;
+}
+
+.nav-bar {
+  position: sticky;
+  top: 0;
+  z-index: 6;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 16px 10px;
+  background: var(--glass);
+  backdrop-filter: blur(24px) saturate(1.6);
+  -webkit-backdrop-filter: blur(24px) saturate(1.6);
+  border-bottom: 1px solid var(--hair);
+}
+
+.nav-bar.is-plain {
+  background: transparent;
+  backdrop-filter: none;
+  border-bottom: 0;
+}
+
+.nav-title {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.nav-title span {
+  display: block;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0;
+  color: var(--ink-dim);
+  margin-top: 1px;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: var(--ink);
+  background: var(--card);
+  transition: background 0.16s ease, transform 0.16s ease;
+}
+
+.nav-btn:active {
+  transform: scale(0.92);
+  background: var(--card-2);
+}
+
+.nav-btn.is-accent {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.section-label {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  padding: 16px 20px 7px;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 0 14px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  text-align: left;
+  padding: 11px 13px;
+  border-radius: 18px;
+  background: var(--card);
+  border: 1px solid transparent;
+  transition: background 0.16s ease, transform 0.16s ease;
+}
+
+.row:active {
+  background: var(--card-2);
+  transform: scale(0.994);
+}
+
+.row-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.row-title {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.row-sub {
+  font-size: 11.5px;
+  color: var(--ink-dim);
+  margin-top: 1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.row-meta {
+  font-size: 11px;
+  color: var(--ink-faint);
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.avatar {
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 15px;
+  font-weight: 700;
+  color: rgba(0, 0, 0, 0.66);
+  letter-spacing: 0.02em;
+}
+
+.avatar.is-round-sq {
+  border-radius: 14px;
+}
+
+.avatar.is-lg {
+  width: 74px;
+  height: 74px;
+  font-size: 26px;
+}
+
+.segmented {
+  display: flex;
+  gap: 3px;
+  padding: 3px;
+  border-radius: 13px;
+  background: var(--card);
+  margin: 4px 14px 10px;
+}
+
+.segmented button {
+  flex: 1;
+  padding: 7px 4px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-dim);
+  transition: background 0.18s ease, color 0.18s ease;
+}
+
+.segmented button.is-on {
+  background: var(--bg-elev2);
+  color: var(--ink);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+}
+
+.switch {
+  position: relative;
+  width: 47px;
+  height: 28px;
+  border-radius: 99px;
+  background: var(--card-2);
+  flex-shrink: 0;
+  transition: background 0.2s ease;
+}
+
+.switch::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+  transition: transform 0.22s cubic-bezier(0.3, 1.2, 0.4, 1);
+}
+
+.switch.is-on {
+  background: var(--green);
+}
+
+.switch.is-on::after {
+  transform: translateX(19px);
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 11px 18px;
+  border-radius: 99px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-size: 13px;
+  font-weight: 700;
+  transition: transform 0.16s ease, filter 0.16s ease;
+}
+
+.btn-primary:active {
+  transform: scale(0.97);
+  filter: brightness(0.95);
+}
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 10px 16px;
+  border-radius: 99px;
+  background: var(--card);
+  color: var(--ink);
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.btn-danger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 11px 18px;
+  border-radius: 99px;
+  background: rgba(255, 92, 92, 0.16);
+  color: var(--red);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.field {
+  width: 100%;
+  padding: 11px 14px;
+  border-radius: 14px;
+  border: 1px solid var(--hair);
+  background: var(--card);
+  color: var(--ink);
+  font-size: 14px;
+  outline: none;
+}
+
+.field::placeholder {
+  color: var(--ink-faint);
+}
+
+.field:focus {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.empty-state {
+  padding: 40px 26px;
+  text-align: center;
+  color: var(--ink-dim);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.sheet-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: flex-end;
+}
+
+.sheet-scrim {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+  animation: fadeIn 0.2s ease both;
+}
+
+.sheet {
+  position: relative;
+  width: 100%;
+  max-height: 78%;
+  overflow-y: auto;
+  padding: 10px 16px 24px;
+  border-radius: 28px 28px 0 0;
+  background: var(--bg-soft);
+  border-top: 1px solid var(--hair);
+  animation: sheetUp 0.3s cubic-bezier(0.2, 0.9, 0.25, 1) both;
+  box-shadow: 0 -20px 50px rgba(0, 0, 0, 0.45);
+}
+
+.sheet-grabber {
+  width: 38px;
+  height: 4px;
+  border-radius: 99px;
+  background: var(--ink-faint);
+  margin: 2px auto 12px;
+}
+
+.sheet-title {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 12px;
+  padding: 0 4px;
+}
+
+.hint {
+  font-size: 11.5px;
+  color: var(--ink-faint);
+  line-height: 1.45;
+  padding: 10px 20px 0;
+}

@@ -1,0 +1,274 @@
+.messages {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.messages-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 8px 20px 8px;
+}
+
+.thread-list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 2px 12px 14px;
+  scrollbar-width: none;
+}
+
+.thread-list::-webkit-scrollbar {
+  display: none;
+}
+
+.thread-row {
+  align-items: center;
+}
+
+.thread-row-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.thread-row-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 1px;
+}
+
+.unread-badge {
+  flex-shrink: 0;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 99px;
+  display: grid;
+  place-items: center;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-size: 9.5px;
+  font-weight: 800;
+}
+
+/* -------------------------------- thread view ------------------------------- */
+.thread-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px 8px;
+  border-bottom: 1px solid var(--hair);
+  background: var(--glass);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.thread-who {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+}
+
+.thread-name {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.thread-status {
+  font-size: 10px;
+  color: var(--ink-dim);
+}
+
+.thread-messages {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 12px 14px 8px;
+  scrollbar-width: none;
+}
+
+.thread-messages::-webkit-scrollbar {
+  display: none;
+}
+
+.thread-intro {
+  padding: 2px 0 14px;
+  text-align: center;
+  font-size: 9.5px;
+  line-height: 1.4;
+  color: var(--ink-faint);
+}
+
+.msg-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  margin-top: 5px;
+  animation: riseIn 0.18s ease both;
+}
+
+.msg-row.is-me {
+  justify-content: flex-end;
+}
+
+.msg-avatar {
+  width: 26px;
+  height: 26px;
+  border-radius: 9px;
+  font-size: 9.5px;
+  flex-shrink: 0;
+}
+
+.msg-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  max-width: 76%;
+}
+
+.msg-row.is-me .msg-stack {
+  align-items: flex-end;
+}
+
+.bubble {
+  padding: 8px 13px;
+  border-radius: 18px 18px 18px 6px;
+  background: var(--card-2);
+  font-size: 13px;
+  line-height: 1.38;
+  word-break: break-word;
+  animation: riseIn 0.16s ease both;
+}
+
+.bubble.is-me {
+  border-radius: 18px 18px 6px 18px;
+  background: linear-gradient(160deg, #ffe07a, #f2b705);
+  color: #231a02;
+  font-weight: 500;
+}
+
+.bubble-stamp {
+  padding: 0 4px;
+  font-size: 9px;
+  color: var(--ink-faint);
+}
+
+.bubble.typing {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 14px;
+}
+
+.bubble.typing i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--ink-dim);
+  animation: typingBounce 1s infinite;
+}
+
+.bubble.typing i:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.bubble.typing i:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes typingBounce {
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  30% {
+    transform: translateY(-4px);
+    opacity: 1;
+  }
+}
+
+.composer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px 11px;
+  border-top: 1px solid var(--hair);
+  background: var(--glass);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.composer-input {
+  flex: 1;
+  min-width: 0;
+  padding: 9px 14px;
+  border-radius: 99px;
+  border: 1px solid var(--hair);
+  background: var(--card);
+  color: var(--ink);
+  font-size: 13px;
+  outline: none;
+}
+
+.composer-input:focus {
+  border-color: var(--accent);
+}
+
+.composer-input::placeholder {
+  color: var(--ink-faint);
+}
+
+.composer-send {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  background: var(--accent);
+  color: var(--accent-ink);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.composer-send:disabled {
+  opacity: 0.32;
+}
+
+.composer-send:active {
+  transform: scale(0.92);
+}
+
+/* -------------------------------- new message ------------------------------- */
+.sheet-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 4px 10px;
+}
+
+.sheet-head .sheet-title {
+  margin: 0;
+  padding: 0;
+}
+
+.sheet-contacts {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}

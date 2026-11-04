@@ -1,0 +1,1381 @@
+/* ================================ shared app ================================ */
+.app-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 18px 10px;
+}
+
+.app-head-title {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.app-head-sub {
+  margin-top: 2px;
+  font-size: 11.5px;
+  color: var(--ink-dim);
+}
+
+.chips {
+  display: flex;
+  gap: 6px;
+  padding: 2px 14px 10px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.chips::-webkit-scrollbar {
+  display: none;
+}
+
+.chips button {
+  padding: 6px 12px;
+  border-radius: 99px;
+  background: var(--card);
+  color: var(--ink-dim);
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: background 0.16s ease, color 0.16s ease;
+}
+
+.chips button.is-on {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+/* ================================== photos ================================= */
+.photos {
+  min-height: 100%;
+  padding-bottom: 10px;
+}
+
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3px;
+  padding: 0 3px 14px;
+}
+
+.photo-tile {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 5px;
+  overflow: hidden;
+  transition: transform 0.16s ease, filter 0.16s ease;
+}
+
+.photo-tile:active {
+  transform: scale(0.96);
+  filter: brightness(0.9);
+}
+
+.photo-tile-date {
+  position: absolute;
+  left: 5px;
+  bottom: 4px;
+  font-size: 8px;
+  color: rgba(255, 255, 255, 0.92);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+}
+
+.photo-viewer {
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  border-radius: inherit;
+  overflow: hidden;
+  background: #000;
+  animation: fadeIn 0.2s ease both;
+}
+
+.photo-viewer-art {
+  position: absolute;
+  inset: 0;
+}
+
+.photo-viewer-top {
+  position: absolute;
+  top: 10px;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 14px;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 10.5px;
+}
+
+.photo-close {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(8px);
+  color: #fff;
+}
+
+.photo-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  width: 32px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.32);
+  backdrop-filter: blur(6px);
+  color: #fff;
+}
+
+.photo-nav.is-left {
+  left: 8px;
+}
+
+.photo-nav.is-right {
+  right: 8px;
+}
+
+.photo-viewer-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 40px 16px calc(var(--homebar-h) + 18px);
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.78));
+  color: #fff;
+}
+
+.photo-viewer-bar strong {
+  display: block;
+  font-size: 13px;
+}
+
+.photo-viewer-bar span {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.photo-viewer-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.photo-viewer-actions button {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(8px);
+  color: #fff;
+}
+
+/* ================================== weather ================================ */
+.weather {
+  position: relative;
+  min-height: 100%;
+  overflow: hidden;
+  color: #fff;
+}
+
+.weather-sky {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, #0a1c31 0%, #1e4b7a 42%, #4e86b8 76%, #93bcd8 100%);
+}
+
+.sky-orb {
+  position: absolute;
+  top: 9%;
+  right: 14%;
+  width: 108px;
+  height: 108px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff6c2 0%, #ffd34e 48%, rgba(255, 211, 78, 0) 72%);
+  animation: floatOrb 14s ease-in-out infinite;
+}
+
+.sky-cloud {
+  position: absolute;
+  height: 44px;
+  width: 150px;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.18);
+  filter: blur(10px);
+}
+
+.sky-cloud.one {
+  top: 22%;
+  animation: drift 34s linear infinite;
+}
+
+.sky-cloud.two {
+  top: 36%;
+  height: 30px;
+  width: 104px;
+  opacity: 0.7;
+  animation: drift 46s linear infinite;
+  animation-delay: -12s;
+}
+
+.sky-cloud.three {
+  top: 12%;
+  height: 24px;
+  width: 78px;
+  opacity: 0.5;
+  animation: drift 58s linear infinite;
+  animation-delay: -30s;
+}
+
+@keyframes floatOrb {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes drift {
+  from {
+    transform: translateX(-40%);
+  }
+  to {
+    transform: translateX(340%);
+  }
+}
+
+.weather-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  padding: 10px 18px 28px;
+}
+
+.weather-head h1 {
+  margin: 0;
+  font-size: 29px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.25);
+}
+
+.weather-head p {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 2px;
+  font-size: 10.5px;
+  color: rgba(255, 255, 255, 0.68);
+}
+
+.weather-now {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 2px;
+}
+
+.weather-temp {
+  font-size: 74px;
+  font-weight: 200;
+  line-height: 0.9;
+  letter-spacing: -0.05em;
+  text-shadow: 0 4px 22px rgba(0, 0, 0, 0.28);
+}
+
+.weather-cond strong {
+  display: block;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.weather-cond span {
+  font-size: 11.5px;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.weather-hourly {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding: 11px 12px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  scrollbar-width: none;
+}
+
+.weather-hourly::-webkit-scrollbar {
+  display: none;
+}
+
+.weather-hour {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  min-width: 42px;
+  font-size: 9.5px;
+  color: rgba(255, 255, 255, 0.76);
+}
+
+.weather-hour strong {
+  font-size: 11.5px;
+  color: #fff;
+  font-weight: 600;
+}
+
+.wx-glyph {
+  color: #fff;
+}
+
+.wx-sun {
+  color: #ffd34e;
+}
+
+.wx-rain {
+  color: #cfe4f5;
+}
+
+.weather-card {
+  padding: 12px 14px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.weather-card-label {
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.58);
+}
+
+.weather-day {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 11.5px;
+}
+
+.weather-day:first-of-type {
+  margin-top: 6px;
+  border-top: 0;
+}
+
+.weather-day-name {
+  width: 40px;
+  font-weight: 600;
+}
+
+.weather-day-temp {
+  margin-left: auto;
+  display: flex;
+  gap: 7px;
+  font-variant-numeric: tabular-nums;
+}
+
+.weather-day-temp em {
+  font-style: normal;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.weather-day-cond {
+  width: 74px;
+  text-align: right;
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.weather-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.weather-detail {
+  padding: 10px 12px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.09);
+  border: 1px solid rgba(255, 255, 255, 0.13);
+}
+
+.weather-detail span {
+  display: block;
+  font-size: 8.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.weather-detail strong {
+  font-size: 13.5px;
+  font-weight: 600;
+}
+
+.weather-foot {
+  text-align: center;
+  font-size: 8.5px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* =================================== clock ================================= */
+.clock {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  padding-bottom: 8px;
+}
+
+.clock-tabs {
+  margin: 0 14px 12px;
+}
+
+.clock-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0 14px 16px;
+}
+
+.world-hero {
+  padding: 16px;
+  border-radius: 24px;
+  text-align: center;
+  background: linear-gradient(160deg, var(--accent-soft), transparent 75%);
+  border: 1px solid var(--hair);
+}
+
+.world-hero-label {
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.world-hero strong {
+  display: block;
+  font-size: 50px;
+  font-weight: 200;
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+}
+
+.world-hero > span:last-child {
+  font-size: 11px;
+  color: var(--ink-dim);
+}
+
+.world-row {
+  padding: 13px 14px;
+}
+
+.world-time {
+  font-size: 19px;
+  font-weight: 300;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+}
+
+.alarm-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-right: 2px;
+}
+
+.alarm-row {
+  padding: 13px 14px;
+}
+
+.alarm-time {
+  font-size: 27px;
+  font-weight: 300;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.alarm-time.is-off {
+  color: var(--ink-faint);
+}
+
+.alarm-picker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 4px 0 16px;
+}
+
+.alarm-spin {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.alarm-spin span {
+  font-size: 32px;
+  font-weight: 300;
+  font-variant-numeric: tabular-nums;
+}
+
+.alarm-spin button {
+  width: 36px;
+  height: 24px;
+  border-radius: 8px;
+  background: var(--card);
+  color: var(--ink-dim);
+  font-size: 16px;
+  line-height: 1;
+}
+
+.alarm-picker > strong {
+  padding-bottom: 4px;
+  font-size: 28px;
+  font-weight: 300;
+}
+
+.alarm-save {
+  width: 100%;
+}
+
+.stopwatch {
+  align-items: center;
+  gap: 18px;
+  padding-top: 26px;
+}
+
+.stopwatch-display {
+  font-size: 50px;
+  font-weight: 200;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+
+.stopwatch-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.stopwatch-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 10px 14px;
+  border-radius: 99px;
+  background: var(--card);
+  color: var(--ink);
+  font-size: 11.5px;
+  font-weight: 600;
+}
+
+.stopwatch-btn.is-main {
+  width: 64px;
+  height: 64px;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  color: var(--accent);
+  border: 1px solid rgba(255, 211, 78, 0.32);
+}
+
+.stopwatch-btn.is-main.is-stop {
+  background: rgba(255, 92, 92, 0.16);
+  color: var(--red);
+  border-color: rgba(255, 92, 92, 0.3);
+}
+
+.lap-list {
+  width: 100%;
+  margin-top: 6px;
+}
+
+.lap-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 9px 4px;
+  border-bottom: 1px solid var(--hair);
+  font-size: 12px;
+  color: var(--ink-dim);
+  font-variant-numeric: tabular-nums;
+}
+
+.lap-row strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.timer {
+  align-items: center;
+  gap: 18px;
+  padding-top: 6px;
+}
+
+.timer-ring {
+  --progress: 0deg;
+  width: 208px;
+  height: 208px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: conic-gradient(var(--accent) var(--progress), var(--card) 0);
+}
+
+.timer-inner {
+  width: 182px;
+  height: 182px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  background: var(--bg);
+}
+
+.timer-inner span {
+  font-size: 38px;
+  font-weight: 200;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+
+.timer-inner small {
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.timer-ring.is-done {
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+.timer-controls {
+  display: flex;
+  gap: 10px;
+}
+
+.timer-presets {
+  padding: 0;
+}
+
+/* ==================================== notes ================================ */
+.notes {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+.notes-search {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0 16px 10px;
+  padding: 9px 12px;
+  border-radius: 12px;
+  background: var(--card);
+  color: var(--ink-faint);
+}
+
+.notes-search input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: none;
+  outline: none;
+  font-size: 12.5px;
+  color: var(--ink);
+}
+
+.notes-search input::placeholder {
+  color: var(--ink-faint);
+}
+
+.notes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 14px 18px;
+}
+
+.note-card {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: var(--card);
+  text-align: left;
+}
+
+.note-card strong {
+  font-size: 13.5px;
+  font-weight: 600;
+}
+
+.note-card span {
+  font-size: 11.5px;
+  color: var(--ink-dim);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.note-card em {
+  margin-top: 2px;
+  font-style: normal;
+  font-size: 9px;
+  color: var(--ink-faint);
+}
+
+.app-window[data-app='notes'] .app-body,
+.app-window[data-app='calculator'] .app-body {
+  overflow: hidden;
+}
+
+.notes-editor {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 0 18px;
+}
+
+.notes-editor-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 0 6px;
+}
+
+.notes-status {
+  font-size: 9.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.notes-title-input {
+  padding: 6px 0;
+  border: 0;
+  background: none;
+  outline: none;
+  font-size: 21px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.notes-body-input {
+  flex: 1;
+  padding: 4px 0 18px;
+  border: 0;
+  background: none;
+  outline: none;
+  resize: none;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--ink);
+  font-family: inherit;
+}
+
+.notes-title-input::placeholder,
+.notes-body-input::placeholder {
+  color: var(--ink-faint);
+}
+
+/* ================================== calendar =============================== */
+.calendar {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+.calendar-today {
+  margin-top: 4px;
+  padding: 7px 12px;
+  font-size: 11px;
+}
+
+.calendar-monthbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px 8px;
+}
+
+.calendar-monthbar strong {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.calendar-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  padding: 0 12px;
+}
+
+.calendar-weekdays span {
+  text-align: center;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  padding: 4px 12px 12px;
+}
+
+.calendar-cell {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  font-size: 12px;
+  color: var(--ink);
+}
+
+.calendar-cell.is-empty {
+  pointer-events: none;
+}
+
+.calendar-cell i {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+}
+
+.calendar-cell.is-today {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.calendar-cell.is-selected {
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 700;
+}
+
+.calendar-cell.is-selected i {
+  background: rgba(0, 0, 0, 0.45) !important;
+}
+
+.calendar-agenda {
+  padding: 12px 16px 18px;
+  border-top: 1px solid var(--hair);
+}
+
+.calendar-empty {
+  padding: 2px 2px 8px;
+  font-size: 11.5px;
+  color: var(--ink-dim);
+}
+
+.agenda-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--hair);
+}
+
+.agenda-dot {
+  width: 7px;
+  height: 7px;
+  margin-top: 5px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.agenda-row strong {
+  display: block;
+  font-size: 12.5px;
+}
+
+.agenda-row span {
+  font-size: 10.5px;
+  color: var(--ink-dim);
+}
+
+/* ================================= calculator ============================== */
+.calculator {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 0 14px 6px;
+}
+
+.calc-display {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-end;
+  gap: 4px;
+  padding: 8px 8px 14px;
+}
+
+.calc-tape {
+  min-height: 14px;
+  font-size: 11px;
+  color: var(--ink-faint);
+}
+
+.calc-value {
+  font-size: 52px;
+  font-weight: 200;
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+  word-break: break-all;
+  text-align: right;
+}
+
+.calc-pad {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  padding-bottom: 2px;
+}
+
+.calc-key {
+  aspect-ratio: 1;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--card-2);
+  color: var(--ink);
+  font-size: 20px;
+  font-weight: 500;
+  transition: transform 0.1s ease, background 0.1s ease;
+}
+
+.calc-key:active {
+  transform: scale(0.94);
+  background: var(--card);
+}
+
+.calc-key.is-fn {
+  background: var(--card);
+  color: var(--ink-dim);
+  font-size: 16px;
+}
+
+.calc-key.is-op {
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 600;
+}
+
+.calc-key.is-op.is-armed {
+  background: #fff;
+}
+
+.calc-key.is-zero {
+  grid-column: span 2;
+  aspect-ratio: auto;
+  border-radius: 99px;
+  justify-content: flex-start;
+  padding-left: 26px;
+}
+
+/* =================================== settings ============================== */
+.settings {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  padding-bottom: 14px;
+}
+
+.settings-profile {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin: 0 14px 4px;
+  padding: 13px 14px;
+  border-radius: 20px;
+  background: linear-gradient(150deg, var(--accent-soft), var(--card));
+}
+
+.settings-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(160deg, #ffe07a, #f2b705);
+  color: #2a1e02;
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.settings-profile div {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.settings-profile strong {
+  font-size: 14px;
+}
+
+.settings-profile span {
+  font-size: 11px;
+  color: var(--ink-dim);
+}
+
+.settings-profile > svg {
+  color: var(--ink-faint);
+}
+
+.setting-row {
+  padding: 11px 12px;
+}
+
+.setting-icon {
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  border-radius: 9px;
+  display: grid;
+  place-items: center;
+  background: var(--card-2);
+  color: var(--ink-dim);
+}
+
+.theme-switch {
+  display: flex;
+  gap: 3px;
+  padding: 3px;
+  border-radius: 99px;
+  background: var(--card-2);
+}
+
+.theme-switch button {
+  width: 28px;
+  height: 26px;
+  border-radius: 99px;
+  display: grid;
+  place-items: center;
+  color: var(--ink-dim);
+}
+
+.theme-switch button.is-on {
+  background: var(--bg-elev2);
+  color: var(--ink);
+}
+
+.setting-slider {
+  width: 100%;
+  height: 3px;
+  margin-top: 7px;
+  accent-color: var(--accent);
+}
+
+.wallpaper-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  padding: 0 14px 4px;
+}
+
+.wallpaper-swatch {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.wallpaper-swatch span {
+  width: 100%;
+  aspect-ratio: 9 / 13;
+  border-radius: 12px;
+  border: 2px solid transparent;
+  box-shadow: 0 6px 16px -8px rgba(0, 0, 0, 0.85);
+  transition: border-color 0.16s ease, transform 0.16s ease;
+}
+
+.wallpaper-swatch:active span {
+  transform: scale(0.97);
+}
+
+.wallpaper-swatch.is-on span {
+  border-color: var(--accent);
+}
+
+.wallpaper-swatch em {
+  font-style: normal;
+  font-size: 9.5px;
+  color: var(--ink-dim);
+}
+
+.settings-badge {
+  padding: 4px 8px;
+  border-radius: 99px;
+  background: rgba(52, 211, 153, 0.14);
+  color: var(--green);
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.storage-bar {
+  display: flex;
+  gap: 2px;
+  height: 8px;
+  margin: 4px 4px 0;
+  border-radius: 99px;
+  overflow: hidden;
+  background: var(--card);
+}
+
+.storage-bar i {
+  height: 100%;
+  background: var(--accent);
+}
+
+.settings-foot {
+  padding: 18px 20px 4px;
+  text-align: center;
+  font-size: 9px;
+  line-height: 1.5;
+  color: var(--ink-faint);
+}
+
+/* ==================================== music ================================ */
+.music {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+.music-body {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 0 18px 20px;
+}
+
+.music-art {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 24px;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 26px 50px -22px rgba(0, 0, 0, 0.9);
+}
+
+.music-art-gloss {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.35), transparent 45%);
+}
+
+.music-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  height: 54px;
+}
+
+.music-bars i {
+  width: 5px;
+  height: 30%;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.9);
+  animation: bar 0.9s ease-in-out infinite alternate;
+}
+
+@keyframes bar {
+  from {
+    height: 16%;
+  }
+  to {
+    height: 100%;
+  }
+}
+
+.music-meta {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.music-meta h2 {
+  margin: 0;
+  font-size: 21px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.music-meta p {
+  margin-top: 2px;
+  font-size: 11.5px;
+  color: var(--ink-dim);
+}
+
+.music-meta button {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: var(--ink-faint);
+}
+
+.music-meta button.is-liked {
+  color: #ff5c8a;
+}
+
+.music-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.music-track-line {
+  height: 4px;
+  border-radius: 99px;
+  background: var(--card-2);
+  overflow: hidden;
+}
+
+.music-track-line span {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+  transition: width 1s linear;
+}
+
+.music-times {
+  display: flex;
+  justify-content: space-between;
+  font-size: 9px;
+  color: var(--ink-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.music-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 6px;
+}
+
+.music-controls button {
+  display: grid;
+  place-items: center;
+  color: var(--ink);
+}
+
+.music-small {
+  color: var(--ink-faint) !important;
+}
+
+.music-play {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--accent-ink) !important;
+  box-shadow: 0 14px 28px -14px rgba(242, 183, 5, 0.9);
+}
+
+.music-queue {
+  margin-top: 4px;
+}
+
+.queue-row {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  padding: 8px 6px;
+  border-radius: 12px;
+  text-align: left;
+}
+
+.queue-row.is-on {
+  background: var(--card);
+}
+
+.queue-art {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.queue-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.queue-text strong {
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.queue-text em {
+  font-style: normal;
+  font-size: 10px;
+  color: var(--ink-dim);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.queue-length {
+  font-size: 10px;
+  color: var(--ink-faint);
+  font-variant-numeric: tabular-nums;
+}
