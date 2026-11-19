@@ -1,0 +1,18 @@
+<Machine arch="aarch64">
+  <Name>BananaOS ARM64 Tablet Prototype</Name>
+  <Memory unit="MiB">2048</Memory>
+  <CurrentMemory unit="MiB">2048</CurrentMemory>
+  <VCPU placement="static">4</VCPU>
+  <OS>
+    <Type arch="aarch64" machine="virt">hvm</Type>
+    <Loader readonly="yes" type="pflash">/usr/share/AAVMF/AAVMF_CODE.fd</Loader>
+  </OS>
+  <Features>
+    <ACPI/><GIC version="3"/>
+  </Features>
+  <Devices>
+    <Graphics type="virtio" autoport="yes">
+      <Listen type="network" address="127.0.0.1"/>
+    </Graphics>
+  </Devices>
+</Machine>
